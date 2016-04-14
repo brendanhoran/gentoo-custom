@@ -1,0 +1,36 @@
+--- scsi-layer.c.org	2016-04-14 10:53:58.960953279 +0800
++++ scsi-layer.c	2016-04-13 21:50:56.861898698 +0800
+@@ -910,12 +910,10 @@
+ 
+ 	 if(layer_type & 0x06) /* strange thing: (re-)writeable but neither plus nor dash */ 
+ 	 {  dh->typeDescr = g_strdup("DVD-ROM (fake)");
+-	    dh->subType = DVD;
+ 	    break;
+ 	 }
+ 
+ 	 dh->typeDescr = g_strdup("DVD-ROM");
+-	 dh->subType = UNSUPPORTED;
+ 	 break;
+       }
+ 
+@@ -1022,7 +1020,7 @@
+ 
+    if(!strncmp((char*)&buf[4+8], "BDO", 3))
+    {  dh->typeDescr = g_strdup("BD-ROM");
+-      dh->subType = UNSUPPORTED;
++      dh->subType = BD;
+    }
+ 
+    if(!strncmp((char*)&buf[4+8], "BDW", 3))
+@@ -2712,11 +2710,6 @@
+       }
+    }
+ 
+-   if(dh->mainType == DVD && query_copyright(dh))
+-   {  CloseImage(image);
+-      Stop(_("This software does not support encrypted media.\n"));
+-      return NULL;
+-   }
+ 
+    /* Create the bitmap of simulated defects */
+ 
